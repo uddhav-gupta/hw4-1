@@ -5,19 +5,21 @@
 
 <div class="row">
   <% @entries.each do |entry| %>
-    <div class="col-md-4 mb-4">
-      <div class="card">
-        <% if entry.image.attached? %>
-          <%= image_tag entry.image, class: "card-img-top" %>
-        <% end %>
-        <div class="card-body">
-          <h5 class="card-title"><%= entry.title %></h5>
-          <p class="card-text"><small class="text-muted">
-            <%= entry.occurred_on.strftime("%B %d, %Y") %>
-          </small></p>
-          <p class="card-text"><%= entry.description %></p>
+    <% if entry.user_id == session[:user_id] %>
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <% if entry.image.attached? %>
+            <%= image_tag entry.image, class: "card-img-top" %>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= entry.title %></h5>
+            <p class="card-text"><small class="text-muted">
+              <%= entry.occurred_on.strftime("%B %d, %Y") %>
+            </small></p>
+            <p class="card-text"><%= entry.description %></p>
+          </div>
         </div>
       </div>
-    </div>
+    <% end %>
   <% end %>
 </div>

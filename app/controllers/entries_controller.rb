@@ -8,8 +8,8 @@ class EntriesController < ApplicationController
   
   def create
     @entry = Entry.new(entry_params)
-    @entry.user_id = @current_user.id
-    
+    @entry.user_id = session[:user_id]
+        
     if @entry.save
       redirect_to place_path(@entry.place), notice: "Entry created successfully!"
     else

@@ -2,15 +2,16 @@ class PlacesController < ApplicationController
   before_action :require_login, except: [:index]
   
   def index
-    @places = Place.all
+    @places = Place.where(user_id: session[:user_id])
   end
   
   def show
-    @place = Place.find_by(id: params[:id])
-    if @place
-      @entries = @current_user.entries.where(place_id: @place.id)
+    @place = Place.find_by(id: params["id"])
+    
+    if @place.nil? || @place.user_id != session[:user_id]
+      redirect_to places_path, notice: "Place not found"
     else
-      redirect_to places_path, alert: "Place not found"
+      @entries = @place.entries
     end
   end
   
@@ -20,10 +21,12 @@ class PlacesController < ApplicationController
   
   def create
     @place = Place.new(place_params)
+    @place.user_id = session[:user_id]  # Assign the current user's ID
+    
     if @place.save
-      redirect_to places_path, notice: "Place added!"
+      redirect_to @place
     else
-      render :new, status: :unprocessable_entity
+      render :new
     end
   end
   
