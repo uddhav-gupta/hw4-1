@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   
   def require_login
-    if !current_user
+    if !@current_user
       redirect_to login_path, alert: "Please login first"
     end
   end

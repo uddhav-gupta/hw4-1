@@ -8,12 +8,13 @@ class EntriesController < ApplicationController
   
   def create
     @entry = Entry.new(entry_params)
-    @entry.user_id = current_user.id
+    @entry.user_id = @current_user.id
     
     if @entry.save
       redirect_to place_path(@entry.place), notice: "Entry created successfully!"
     else
-      render :new
+      @place = Place.find_by(id: params[:place_id])
+      render :new, status: :unprocessable_entity
     end
   end
   
